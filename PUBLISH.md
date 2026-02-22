@@ -23,8 +23,14 @@ cd /root/.cursor/openclaw-instructions
 gh repo create openclaw-instructions --public --source=. --remote=origin --push
 ```
 
-## Вариант 3: Токен (для агента/скриптов)
+## Вариант 3: Токен + скрипт
 
-Положи Personal Access Token (scope: repo) в `~/.cursor/secrets/github-token` или задай `GH_TOKEN`, затем можно создать репо через API и выполнить push из скрипта.
+Положи Personal Access Token (scope: repo) в `~/.cursor/secrets/github-token` или задай `GH_TOKEN`, затем:
+
+```bash
+./scripts/create-repo-and-push.sh
+```
+
+Скрипт создаст репозиторий на GitHub и выполнит push.
 
 Remote уже настроен: `git@github.com:bbchort/openclaw-instructions.git` (замени bbchort на свой логин, если нужно).

@@ -1,0 +1,9 @@
+# Никогда не коммитить секреты и локальный конфиг
+.env
+.env.local
+*.token
+openclaw.json
+auth-profiles.json
+credentials/
+.openclaw/
+*.log

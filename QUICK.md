@@ -7,4 +7,6 @@
    Чтобы все могли писать: `openclaw config set channels.telegram.allowFrom '["*"]'` и `openclaw config set channels.telegram.dmPolicy open` → перезапуск gateway.
 5. **Перезапуск gateway:** `openclaw gateway --force` или Ctrl+C и снова `openclaw gateway`.
 
+**Бот пишет и пропадает / не отвечает?** Скорее всего переполнен контекст. В Telegram отправь боту **`/new`** — начнётся новая сессия.
+
 Подробности и нюансы — в [README.md](README.md).

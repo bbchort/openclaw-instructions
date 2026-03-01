@@ -34,7 +34,7 @@
 
 ### Модели и авторизация
 - **Codex (OpenAI):** подключён через OAuth. Важно: команда `openclaw models auth login --provider openai-codex` даёт «No provider plugins found» — Codex подключается только через **`openclaw onboard --auth-choice openai-codex`** (в TTY).
-- В конфиге есть провайдеры: **openai-codex** (модель o4-mini и др.), **minimax**, **kimi-coding**. Основная модель и фоллбэки заданы в `agents.defaults.model` (primary + fallbacks).
+- В конфиге есть провайдеры: **openai-codex** (модели gpt-5.3-codex, o4-mini и др.), **minimax**, **kimi-coding**. Основная модель по умолчанию — **openai-codex/gpt-5.3-codex**; фоллбэки заданы в `agents.defaults.model` (primary + fallbacks). Смена модели: правка `agents.defaults.model.primary` в `~/.openclaw/openclaw.json` и добавление новой модели в `models.providers.openai-codex.models` при необходимости, затем перезапуск gateway.
 - Для кастомного провайдера в `models.providers.<id>.api` допустимы только: `openai-completions`, `openai-responses`, `anthropic-messages`, `google-generative-ai`, `github-copilot`, `bedrock-converse-stream`, `ollama`. **Не** `chat_completions` — из‑за этого конфиг становился невалидным и gateway падал.
 
 ### Telegram
@@ -63,6 +63,9 @@
 
 6. **Gateway не поднимается / unreachable**  
    Проверить валидность конфига (`openclaw doctor`), при необходимости исправить `api` и другие поля по схеме. Перезапустить: `systemctl --user restart openclaw-gateway.service`.
+
+7. **Переключить ассистента на GPT-5.3 Codex вместо o4-mini**  
+   В `~/.openclaw/openclaw.json`: добавить модель `gpt-5.3-codex` в `models.providers.openai-codex.models` (по образцу o4-mini), выставить `agents.defaults.model.primary` в `openai-codex/gpt-5.3-codex`, при желании добавить o4-mini в `fallbacks`. Перезапустить gateway.
 
 ---
 

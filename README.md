@@ -232,7 +232,10 @@ curl -sS "https://api.telegram.org/bot<ТВОЙ_ТОКЕН>/getMe"
 5. **Одна консоль, а нужны и gateway, и команды**  
    Запустить gateway в фоне: `openclaw gateway &` — затем в той же консоли можно вызывать `openclaw ...` (onboard, channels, config и т.д.).
 
-6. **Пишет, пишет — ответы не приходят или «пропадают»**  
+6. **Конфиг невалидный: `models.providers.openai-codex.api: Invalid input`**  
+   В конфиге для провайдера указано недопустимое значение `api`. Допустимые: `openai-completions`, `openai-responses`, `anthropic-messages`, `google-generative-ai`, `github-copilot`, `bedrock-converse-stream`, `ollama`. Часто ошибочно пишут `chat_completions` — нужно **`openai-completions`**. Исправить в `~/.openclaw/openclaw.json` в блоке `models.providers.<provider>.api`, затем перезапустить gateway: `systemctl --user restart openclaw-gateway.service` или `openclaw gateway --force`.
+
+7. **Пишет, пишет — ответы не приходят или «пропадают»**  
    Чаще всего переполнен **контекст сессии** (в `openclaw status` видно что-то вроде `247k/272k (91%)`). Нужна **новая сессия**:
    - **В Telegram:** написать боту **`/new`** или **`/reset`** — начнётся новый диалог с пустым контекстом.
    - **В Dashboard:** нажать **«New session»** в чате.

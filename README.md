@@ -214,7 +214,64 @@ curl -sS "https://api.telegram.org/bot<ТВОЙ_ТОКЕН>/getMe"
 
 ---
 
-## 8. Тонкости и частые проблемы
+## 8. Удалённый браузер: OpenClaw на VPS + твой компьютер/Chrome
+
+Если **Gateway (агент) работает на VPS**, а ты хочешь, чтобы агент управлял **твоим браузером на своём ПК**, нужен **node host** на твоём компьютере и **SSH-туннель** до Gateway.
+
+### Схема
+
+- **VPS:** Gateway (openclaw gateway), слушает `127.0.0.1:18789`.
+- **Твой ПК:** SSH-туннель `localhost:18789` → VPS:18789; на ПК запущен **node host** (`openclaw node run`), который подключается к Gateway через туннель и поднимает **browser relay** (порт 18792). Расширение Chrome на твоём ПК подключается к этому relay.
+- Агент на VPS отправляет команды браузеру через node; node выполняет их в твоём Chrome.
+
+### Шаги на VPS (уже есть)
+
+- Gateway запущен, `gateway.bind: "loopback"`, порт 18789.
+- Узнай токен: `openclaw config get gateway.auth.token` (он понадобится на ПК).
+
+### Шаги на твоём компьютере
+
+1. **Установи OpenClaw CLI** (чтобы была команда `openclaw node run`):
+
+   ```bash
+   curl -fsSL https://openclaw.ai/install.sh | bash
+   ```
+
+2. **SSH-туннель до VPS** (держи в фоне или настрой автозапуск):
+
+   ```bash
+   ssh -N -L 18789:127.0.0.1:18789 USER@VPS_IP
+   ```
+
+   Замени `USER` и `VPS_IP` на пользователя и IP/хост VPS. Порт 18789 на твоём ПК будет вести на Gateway на VPS.
+
+3. **Запуск node host** (в отдельном терминале, после поднятия туннеля):
+
+   ```bash
+   export OPENCLAW_GATEWAY_TOKEN="<токен с VPS>"
+   openclaw node run --host 127.0.0.1 --port 18789
+   ```
+
+   Node подключится к Gateway через туннель и поднимет relay для расширения (порт 18792 = 18789+3).
+
+4. **Chrome-расширение на твоём ПК:**
+
+   - Установка: `openclaw browser extension install`, затем в Chrome: «Расширения» → «Загрузить распакованное» → папка из `openclaw browser extension path`.
+   - В настройках расширения укажи **Gateway token** (тот же, что на VPS) и **Port: 18792**.
+
+5. **Pairing (если попросит):** на VPS выполни `openclaw devices list`, при необходимости одобри устройство: `openclaw devices approve <id>`.
+
+После этого при запросе «открыть браузер» агент на VPS будет использовать твой Chrome через node и расширение. Расширением привязываешь нужную вкладку (кнопка расширения → Attach).
+
+### Важно
+
+- Туннель и node host должны быть запущены **на том же ПК, где Chrome** с расширением.
+- Не открывай порты 18789/18792 в интернет; туннель только с твоего ПК до VPS.
+- Документация: [Chrome Extension](https://docs.openclaw.ai/tools/chrome-extension), [Remote Access](https://docs.openclaw.ai/gateway/remote).
+
+---
+
+## 9. Тонкости и частые проблемы
 
 1. **"No provider plugins found"** при `openclaw models auth login --provider openai-codex`  
    Codex подключается только через onboard: `openclaw onboard --auth-choice openai-codex`.
@@ -243,7 +300,7 @@ curl -sS "https://api.telegram.org/bot<ТВОЙ_ТОКЕН>/getMe"
 
 ---
 
-## 9. Итоговая схема того, что у нас настроено
+## 10. Итоговая схема того, что у нас настроено
 
 - **Установка:** OpenClaw через `install.sh`, при необходимости — донастройка через `onboard --non-interactive` и ручной `onboard --auth-choice openai-codex`.
 - **Модель:** Codex по OAuth, модель по умолчанию `openai-codex/gpt-5.3-codex`.
@@ -254,6 +311,6 @@ curl -sS "https://api.telegram.org/bot<ТВОЙ_ТОКЕН>/getMe"
 
 ---
 
-## 10. Публикация этой инструкции на GitHub
+## 11. Публикация этой инструкции на GitHub
 
 Готовый репозиторий лежит в `openclaw-instructions/`. Чтобы выложить его на GitHub, см. [PUBLISH.md](PUBLISH.md).

@@ -37,6 +37,9 @@
 - В конфиге есть провайдеры: **openai-codex** (модели gpt-5.3-codex, o4-mini и др.), **minimax**, **kimi-coding**. Основная модель по умолчанию — **openai-codex/gpt-5.3-codex**; фоллбэки заданы в `agents.defaults.model` (primary + fallbacks). Смена модели: правка `agents.defaults.model.primary` в `~/.openclaw/openclaw.json` и добавление новой модели в `models.providers.openai-codex.models` при необходимости, затем перезапуск gateway.
 - Для кастомного провайдера в `models.providers.<id>.api` допустимы только: `openai-completions`, `openai-responses`, `anthropic-messages`, `google-generative-ai`, `github-copilot`, `bedrock-converse-stream`, `ollama`. **Не** `chat_completions` — из‑за этого конфиг становился невалидным и gateway падал.
 
+### Удалённый браузер (OpenClaw на VPS + браузер на ПК пользователя)
+- На ПК пользователя: SSH-туннель `-L 18789:127.0.0.1:18789` до VPS, затем `openclaw node run --host 127.0.0.1 --port 18789` и переменная `OPENCLAW_GATEWAY_TOKEN`. Chrome с расширением OpenClaw (relay порт 18792). Подробно: раздел 8 в README openclaw-instructions.
+
 ### Telegram
 - Один бот (аккаунт default), токен в `channels.telegram.botToken`.
 - Чтобы бот отвечал всем в личку: `dmPolicy: "open"` и `allowFrom: ["*"]`. Иначе при `pairing` нужно одобрять отправителей.

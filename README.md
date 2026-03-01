@@ -268,6 +268,7 @@ curl -sS "https://api.telegram.org/bot<ТВОЙ_ТОКЕН>/getMe"
 - Туннель и node host должны быть запущены **на том же ПК, где Chrome** с расширением.
 - Не открывай порты 18789/18792 в интернет; туннель только с твоего ПК до VPS.
 - Документация: [Chrome Extension](https://docs.openclaw.ai/tools/chrome-extension), [Remote Access](https://docs.openclaw.ai/gateway/remote).
+- **Готовая инструкция для ПК** (с токеном) на сервере: `~/.openclaw/workspace/OPENCLAW-PC-SETUP.md`. Краткая версия без секретов: [PC-SETUP.md](PC-SETUP.md) в этом репо.
 
 ---
 
